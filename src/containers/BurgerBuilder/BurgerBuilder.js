@@ -3,6 +3,8 @@ import Aux from "../../hoc/Aux";
 import Burger from "../../components/Burger/Burger";
 import _ from "lodash";
 import BuildControls from "../../components/Burger/BuildConrols/BuildControls";
+import Modal from "../../components/UI/Modal/Modal";
+import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 
 const INGREDIENT_PRICES = {
   salad: 10,
@@ -20,12 +22,12 @@ class BurgerBuilder extends Component {
       meat: 0
     },
     totalPrice: 4,
-    purchaseable: false
+    purchaseable: false,
+    openModal: false
   };
 
   updatePurchaseState(ingredients) {
     let arr = _.values(ingredients);
-    console.log(_.sum(arr));
     return _.sum(arr) > 0;
   }
 
@@ -59,6 +61,10 @@ class BurgerBuilder extends Component {
     });
   };
 
+  openModalHandler = () => {
+    this.setState({ openModal: !this.state.openModal });
+  };
+
   render() {
     const disabledInfo = { ...this.state.ingredients };
     for (let key in disabledInfo) {
@@ -66,6 +72,12 @@ class BurgerBuilder extends Component {
     }
     return (
       <Aux>
+        <Modal openModal={this.state.openModal} close={this.openModalHandler}>
+          <OrderSummary
+            ingredients={this.state.ingredients}
+            totalPrice={this.state.totalPrice}
+          />
+        </Modal>
         <Burger ingredients={this.state.ingredients} />
         <BuildControls
           addIngredients={this.addIngredientsHandler}
@@ -73,6 +85,7 @@ class BurgerBuilder extends Component {
           disabled={disabledInfo}
           totalPrice={this.state.totalPrice}
           orderDisabled={!this.state.purchaseable}
+          openModal={this.openModalHandler}
         />
       </Aux>
     );

@@ -24,7 +24,11 @@ const buildControls = props => (
         />
       );
     })}
-    <button className="OrderButton" disabled={props.orderDisabled}>
+    <button
+      className="OrderButton"
+      disabled={props.orderDisabled}
+      onClick={props.openModal}
+    >
       ORDER NOW
     </button>
   </div>
